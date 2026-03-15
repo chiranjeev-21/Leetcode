@@ -1,0 +1,91 @@
+
+/*
+==========================================================
+Problem: Binary Tree Zigzag Level Order Traversal
+Difficulty: Medium
+==========================================================
+
+Given the root of a binary tree, return the zigzag level order traversal of its nodes' values. (i.e., from left to right, then right to left for the next level and alternate between).
+
+ 
+Example 1:
+
+
+Input: root = [3,9,20,null,null,15,7]
+Output: [[3],[20,9],[15,7]]
+
+
+Example 2:
+
+
+Input: root = [1]
+Output: [[1]]
+
+
+Example 3:
+
+
+Input: root = []
+Output: []
+
+
+ 
+Constraints:
+
+
+	The number of nodes in the tree is in the range [0, 2000].
+	-100 <= Node.val <= 100
+
+==========================================================
+*/
+
+
+/**
+ * Definition for a binary tree node.
+ * struct TreeNode {
+ *     int val;
+ *     TreeNode *left;
+ *     TreeNode *right;
+ *     TreeNode() : val(0), left(nullptr), right(nullptr) {}
+ *     TreeNode(int x) : val(x), left(nullptr), right(nullptr) {}
+ *     TreeNode(int x, TreeNode *left, TreeNode *right) : val(x), left(left), right(right) {}
+ * };
+ */
+class Solution {
+public:
+    vector<vector<int>> zigzagLevelOrder(TreeNode* root) {
+        vector<vector<int>>ans;
+        queue<TreeNode*>q;
+        if(root==NULL){
+            return {};
+        }
+        q.push(root);
+        bool side=false;
+        while(!q.empty()){
+            int n = q.size();
+            int sz=n/2;
+            vector<int> row;
+            for (int i = 0; i < n; i++) {
+                TreeNode* node = q.front();
+                q.pop();
+                row.push_back(node->val);
+                if(node->left!=NULL){
+                    q.push(node->left);
+                }
+                if(node->right!=NULL){
+                    q.push(node->right);
+                }
+            }
+            if(side){
+                reverse(row.begin(),row.end());
+                side =false;
+            }
+            else if(!side){
+                side=true;
+            }
+            ans.push_back(row);
+        }
+        
+        return ans;
+    }
+};
