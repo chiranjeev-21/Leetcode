@@ -1,0 +1,97 @@
+
+/*
+==========================================================
+Problem: Coin Change II
+Difficulty: Medium
+==========================================================
+
+You are given an integer array coins representing coins of different denominations and an integer amount representing a total amount of money.
+
+Return the number of combinations that make up that amount. If that amount of money cannot be made up by any combination of the coins, return 0.
+
+You may assume that you have an infinite number of each kind of coin.
+
+The answer is guaranteed to fit into a signed 32-bit integer.
+
+ 
+Example 1:
+
+
+Input: amount = 5, coins = [1,2,5]
+Output: 4
+Explanation: there are four ways to make up the amount:
+5=5
+5=2+2+1
+5=2+1+1+1
+5=1+1+1+1+1
+
+
+Example 2:
+
+
+Input: amount = 3, coins = [2]
+Output: 0
+Explanation: the amount of 3 cannot be made up just with coins of 2.
+
+
+Example 3:
+
+
+Input: amount = 10, coins = [10]
+Output: 1
+
+
+ 
+Constraints:
+
+
+	1 <= coins.length <= 300
+	1 <= coins[i] <= 5000
+	All the values of coins are unique.
+	0 <= amount <= 5000
+
+==========================================================
+*/
+
+
+class Solution {
+public:
+
+    // int f(vector<int>& coins, int target, int index, vector<vector<int>>& dp){
+    //     if(index==0){
+    //         if(target%coins[index]==0){
+    //             return 1;
+    //         }
+    //         else{
+    //             return 0;
+    //         }
+    //     }
+    //     if(dp[index][target]!=-1){
+    //         return dp[index][target];
+    //     }
+    //     int not_take = f(coins,target,index-1,dp);
+    //     int take=0;
+    //     if(target>=coins[index])
+    //         take = f(coins,target-coins[index],index,dp);
+    //     return dp[index][target]=take+not_take;
+    // }
+
+    int change(int amount, vector<int>& coins) {
+        int n=coins.size();
+        vector<vector<int>>dp(n,vector<int>(amount+1,0));
+        for(int t=0;t<=amount;t++){
+            dp[0][t] = (t%coins[0]==0);
+        }
+
+        for(int index=1;index<n;index++){
+            for(int t=0;t<=amount;t++){
+                int not_take = dp[index-1][t];
+                int take=0;
+                if(t>=coins[index])
+                    take = dp[index][t-coins[index]];
+                dp[index][t]=take+not_take;
+            }
+        }
+        return dp[n-1][amount];
+    }
+};
